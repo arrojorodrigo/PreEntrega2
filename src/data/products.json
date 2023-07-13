@@ -1,0 +1,146 @@
+[
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 3,
+	  "title": "STRONG",
+	  "description": "Hamburguesa de morrón",
+	  "price": 3000,
+	  "thumbnail": "ABCDEFG",
+	  "code": "122",
+	  "stock": 11
+	},
+	{
+	  "id": 4,
+	  "title": "CORDERO",
+	  "description": "Hamburguesa de cordero",
+	  "price": 3500,
+	  "thumbnail": "ABCDEFGH",
+	  "code": "123",
+	  "stock": 10
+	},
+	{
+	  "id": 5,
+	  "title": "VEGGIE",
+	  "description": "Hamburguesa de garbanzo",
+	  "price": 2800,
+	  "thumbnail": "ABCDEFGHI",
+	  "code": "124",
+	  "stock": 20
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 2,
+	  "title": "SMOG",
+	  "description": "Hamburguesa de barbacoa",
+	  "price": 3200,
+	  "thumbnail": "ABCDE",
+	  "code": "121",
+	  "stock": 8
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 2,
+	  "title": "SMOG",
+	  "description": "Hamburguesa de barbacoa",
+	  "price": 3200,
+	  "thumbnail": "ABCDE",
+	  "code": "121",
+	  "stock": 8
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 2,
+	  "title": "SMOG",
+	  "description": "Hamburguesa de barbacoa",
+	  "price": 3200,
+	  "thumbnail": "ABCDE",
+	  "code": "121",
+	  "stock": 8
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 2,
+	  "title": "SMOG",
+	  "description": "Hamburguesa de barbacoa",
+	  "price": 3200,
+	  "thumbnail": "ABCDE",
+	  "code": "121",
+	  "stock": 8
+	},
+	{
+	  "id": 1,
+	  "title": "BACON",
+	  "description": "Hamburguesa de tocino",
+	  "price": 3000,
+	  "thumbnail": "ABCD",
+	  "code": "120",
+	  "stock": 10
+	},
+	{
+	  "id": 2,
+	  "title": "SMOG",
+	  "description": "Hamburguesa de barbacoa",
+	  "price": 3200,
+	  "thumbnail": "ABCDE",
+	  "code": "121",
+	  "stock": 8
+	}
+  ]
