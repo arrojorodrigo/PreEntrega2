@@ -1,144 +1,93 @@
 import fs from "fs";
 
-export default class ProductsManager {
-	#products;
-	#path;
+class ProductDatabase {
+  constructor(path) {
+    this.path = path;
+  }
 
-	constructor(fileName) {
-		this.#products = [];
-		this.#path = `./src/data/${fileName}.json`;
-	};
+  getProducts = async () => this.read();
 
-	getProducts() {
-		// Validar si existe el archivo:
-		if (!fs.existsSync(this.#path)) {
-			try {
-				// Si no existe, crearlo:
-				fs.writeFileSync(this.#path, JSON.stringify(this.#products));
-			} catch (err) {
-				return `Writing error while getting products: ${err}`;
-			};
-		};
+  getProductById = async (id) => {
+    const allProductsArray = await this.read();
+    return allProductsArray.find((product) => product.id === id);
+  };
 
-		// Leer archivo y convertirlo en objeto:
-		try {
-			const data = fs.readFileSync(this.#path, "utf8");
-			const dataArray = JSON.parse(data);
-			return dataArray;
-		} catch (err) {
-			return `Reading error while getting products: ${err}`;
-		};
-	};
+  addProduct = async (newProduct) => {
+    const allProductsArray = await this.read();
+    const nextId = await this.getNextId(allProductsArray);
+    newProduct.id = nextId;
+    newProduct.status = true;
+    allProductsArray.push(newProduct);
+    await this.write(allProductsArray);
+    return newProduct;
+  };
 
-	lastId() {
-		const products = this.getProducts();
+  updateProduct = async (id, newProduct) => {
+    const allProductsArray = await this.read();
+    const productToUpdate = allProductsArray.find((product) => product.id === id);
 
-		// Obtener y devolver último ID:
-		if (products.length > 0) {
-			const lastId = products.reduce((maxId, product) => {
-				return product.id > maxId ? product.id : maxId;
-			}, 0);
-			return lastId;
-		};
+    if (!productToUpdate) {
+      return {
+        status: "error404",
+        message: "no se encontró: " + id,
+        payload: {},
+      };
+    }
 
-		// Si el array está vacío, devolver 0:
-		return 0;
-	};
+    const updatedProduct = this.updateProductFields(productToUpdate, newProduct);
+    const index = allProductsArray.indexOf(productToUpdate);
+    allProductsArray[index] = updatedProduct;
+    await this.write(allProductsArray);
+    return updatedProduct;
+  };
 
-	addProduct(newProduct) {
-		try {
-			const products = this.getProducts();
-			
-			// Validar campos incompletos:
-			if (
-				!newProduct.title ||
-				!newProduct.description ||
-				!newProduct.code ||
-				!newProduct.price ||
-				!newProduct.status ||
-				!newProduct.stock ||
-				!newProduct.category
-			) {
-				return `Please fill all the required fields to add a product`;
-			};
-		
-			// Validar si el código existe:
-			if (products.some(product => product.code == newProduct.code)) {
-				return `The code ${newProduct.code} already exists`;
-			};
-		
-			// Si es correcto, agregar producto con ID y escribir el archivo:
-			const id = this.lastId() + 1;
-			newProduct.id = id;
-			const product = newProduct;
-			products.push(product);
-			fs.writeFileSync(this.#path, JSON.stringify(products));
-			return `Product ${newProduct.id} added`;
-		} catch (err) {
-			return `Writing error while adding the product: ${err}`;
-		};
-	};
+  deleteProduct = async (id) => {
+    const allProductsArray = await this.read();
+    const productToDelete = allProductsArray.find((product) => product.id === id);
 
-	getProductById(id) {
-		try {
-		const products = this.getProducts();
-		const product = products.find(product => product.id === id);
+    if (!productToDelete) {
+      return {
+        status: "error404",
+        message: "no se encontró: " + id,
+        payload: {},
+      };
+    }
 
-		// Validar si el producto existe:
-		if (!product) {
-			return `There's no product with ID ${id}`;
-		}
-		return product;
-		} catch (err) {
-			return `Reading error while getting the product ${id}: ${err}`;
-		};
-	};
+    const index = allProductsArray.indexOf(productToDelete);
+    allProductsArray.splice(index, 1);
+    await this.write(allProductsArray);
+    return productToDelete;
+  };
 
-	updateProduct(id, updatedFields) {
-		try {
-			const products = this.getProducts();
-			const product = products.find(product => product.id === id);
+  updateProductFields = (productToUpdate, newProduct) => ({
+    ...productToUpdate,
+    ...newProduct,
+  });
 
-			// Validar ID:
-			if (!product) {
-				return `There's no product with ID ${id}`;
-			};
+  read = async () => {
+    try {
+      const allProductsString = await fs.promises.readFile(this.path, "utf-8");
+      return allProductsString.length > 0 ? JSON.parse(allProductsString) : [];
+    } catch (err) {
+      console.log("Error en la lectura del archivo", err);
+      return [];
+    }
+  };
 
-			// Si es correcto, actualizar fields y escribir el archivo:
-			for (const key in updatedFields) {
-				if (key.toLowerCase() === "id") {
-					return `You can't update the ID field`;
-				};
+  write = async (allProductsArray) => {
+    const allProductsString = JSON.stringify(allProductsArray);
+    try {
+      await fs.promises.writeFile(this.path, allProductsString);
+    } catch (err) {
+      console.log("Error en la escritura", err);
+    }
+  };
 
-				if (!product.hasOwnProperty(key)) {
-					return `Some field/s doesn't exist/s`;
-				};
+  getNextId = (allProductsArray) => {
+    const allIdsArray = allProductsArray.map((product) => product.id);
+    const numericIds = allIdsArray.filter((id) => typeof id === "number");
+    return numericIds.length > 0 ? Math.max(...numericIds) + 1 : 1;
+  };
+}
 
-				product[key] = updatedFields[key];
-			};
-			fs.writeFileSync(this.#path, JSON.stringify(products));
-			return `Product ${id} updated`;
-		} catch (err) {
-			return `Writing error while updating the product ${id}: ${err}`;
-		};
-	};
-
-	deleteProduct(id) {
-		try {
-			const products = this.getProducts();
-			const productIndex = products.findIndex(product => product.id === id);
-
-			// Validar ID:
-			if (productIndex === -1) {
-				return `There's no product with ID ${id}`;
-			};
-
-			// Si es correcto, borrar producto y escribir el archivo:
-			products.splice(productIndex, 1);
-			fs.writeFileSync(this.#path, JSON.stringify(products));
-			return `Product ${id} deleted`;
-		} catch (err) {
-			return `Writing error while deleting the product ${id}: ${err}`;
-		};
-	};
-};
+export default ProductDatabase;

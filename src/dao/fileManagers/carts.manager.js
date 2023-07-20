@@ -1,66 +1,75 @@
 import fs from "fs";
 import ProductManager from "./productManager.js";
 
-const pathToCarts = "src/dao/carts.json";
-const productManager = new ProductManager();
-
-class CartManager {
+class CartDatabase {
   constructor(path) {
     this.path = path;
+    this.productManager = new ProductManager(pathProducts);
   }
 
-  async addCart() {
-    const allCarts = await this.read();
-    const nextId = this.getNextId(allCarts);
+  addCart = async () => {
+    const allCartsArray = await this.read();
+    const nextId = await this.getNextId(allCartsArray);
     const newCart = {
       id: nextId,
       products: [],
     };
-    allCarts.push(newCart);
-    await this.write(allCarts);
+    allCartsArray.push(newCart);
+    await this.write(allCartsArray);
     return newCart;
-  }
+  };
 
-  async addProductToCart(cartId, productId) {
-    const allCarts = await this.read();
-    const cartToUpdate = allCarts.find((cart) => cart.id === cartId);
+  addProductToCart = async (idCart, idProduct) => {
+    const allCartsArray = await this.read();
+    const cartToUpdate = allCartsArray.find((cart) => cart.id === idCart);
 
     if (!cartToUpdate) {
       return {
-        status: "error404",
-        message: "No se encontró: " + cartId,
+        status: "error",
+        message: "No se encontró el id: " + idCart,
         payload: {},
       };
     }
 
-    const allProducts = await productManager.read();
-    const productToAdd = allProducts.find((product) => product.id === productId);
+    const allProductsArray = await this.productManager.read();
+    const productToAdd = allProductsArray.find((product) => product.id === idProduct);
 
     if (!productToAdd) {
       return {
-        status: "error404",
-        message: "No se encontró: " + productId,
+        status: "error",
+        message: "no se encontró el producto: " + idProduct,
         payload: {},
       };
     }
 
-    const productAlreadyInCart = this.findProductInCart(cartToUpdate, productId);
+    const productAlreadyInCart = await this.findProductInCart(cartToUpdate, idProduct);
 
     if (productAlreadyInCart) {
-      productAlreadyInCart.quantity++;
+      const index = cartToUpdate.products.indexOf(productAlreadyInCart);
+      const productData = {
+        id: productAlreadyInCart.id,
+        quantity: productAlreadyInCart.quantity + 1,
+      };
+      cartToUpdate.products[index] = productData;
     } else {
-      cartToUpdate.products.push({ id: productToAdd.id, quantity: 1 });
+      const productData = {
+        id: productToAdd.id,
+        quantity: 1,
+      };
+      cartToUpdate.products.push(productData);
     }
 
-    await this.write(allCarts);
+    const index = allCartsArray.indexOf(cartToUpdate);
+    allCartsArray[index] = cartToUpdate;
+    await this.write(allCartsArray);
     return cartToUpdate;
-  }
+  };
 
-  findProductInCart(cartToUpdate, productId) {
-    return cartToUpdate.products.find((product) => product.id === productId);
-  }
+  findProductInCart = (cartToUpdate, idProduct) => {
+    return cartToUpdate.products.find((product) => product.id === idProduct);
+  };
 
-  async read() {
+  read = async () => {
     try {
       const allCartsString = await fs.promises.readFile(this.path, "utf-8");
       return allCartsString.length > 0 ? JSON.parse(allCartsString) : [];
@@ -68,22 +77,22 @@ class CartManager {
       console.log("Error en la lectura del archivo", err);
       return [];
     }
-  }
+  };
 
-  async write(allCarts) {
-    const allCartsString = JSON.stringify(allCarts);
+  write = async (allCartsArray) => {
+    const allCartsString = JSON.stringify(allCartsArray);
     try {
       await fs.promises.writeFile(this.path, allCartsString);
     } catch (err) {
       console.log("Error en la escritura", err);
     }
-  }
+  };
 
-  getNextId(allCarts) {
-    const allIdsArray = allCarts.map((cart) => cart.id);
+  getNextId = (allCartsArray) => {
+    const allIdsArray = allCartsArray.map((product) => product.id);
     const numericIds = allIdsArray.filter((id) => typeof id === "number");
     return numericIds.length > 0 ? Math.max(...numericIds) + 1 : 1;
-  }
+  };
 }
 
-export default CartManager;
+export default CartDatabase;
