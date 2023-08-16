@@ -1,12 +1,11 @@
-# PRE ENTREGA 2 
+# PRE ENTREGA 2 CLASE 24.
 # Backend coderhouse
 
 !¡ Ecommerce 
-!¡ Persistencia en base de datos
-!¡ Nuevos Endpoints 
-!¡ MongoDB
-!¡ Express
-!¡ Websockets
+!¡ Modelo User
+!¡ Passport
+!¡ Sistema de login
+!¡ Session o Jwt
 
 
 -Run server
