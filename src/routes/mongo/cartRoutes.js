@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { MongoDBCarts } from "../../daos/mongo/MongoDBCarts.js";
-import { MongoDBProducts } from "../../daos/mongo/MongoDBProducts.js";
+import { MongoDBCarts } from "../../dao/mongo/MongoDBCarts.js";
+import { MongoDBProducts } from "../../dao/mongo/MongoDBProducts.js";
 
 const cartsDAO = new MongoDBCarts();
 const productsDAO = new MongoDBProducts();
