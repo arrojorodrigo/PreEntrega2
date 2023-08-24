@@ -2,24 +2,21 @@ import express from 'express';
 const app = express();
 const port = 8081;
 
-import productsRoute from './routes/products.router.js';
-import cartsRoute from './routes/carts.router.js';
-import viewsRoute from './routes/views.router.js';
+import dotenv from "dotenv"
+
+import productsRoute from "./routes/mongo/productRoutes.js"
+import cartsRoute from './routes/mongo/cartRoutes.js';
+import viewsRoute from './routes/mongo/homeRoutes.js';
 
 import products from './data/products.json' assert { type: 'json' };
 
 import { Server } from 'socket.io';
 
-import mongoose from 'mongoose';
+import { connectMongoDB } from './config/configMongo.js';
 
-const MONGO_USER = 'marrojo';
-const MONGO_PASSWD = '159753mongo';
-const MONGO_CLUSTER = 'mrmojo.p1ksenn.mongodb.net';
+dotenv.config();
 
-mongoose.set('strictQuery', false);
-mongoose.connect(
-  `mongodb+srv://${MONGO_USER}:${MONGO_PASSWD}@${MONGO_CLUSTER}/ecommerce?retryWrites=true&w=majority`
-);
+connectMongoDB();
 
 // HANDLEBARS PARA PROXIMA ENTREGA
 // import handlebars from "express-handlebars";
@@ -32,9 +29,11 @@ mongoose.connect(
 // MIDDLEWARS
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use('/api/products', productsRoute);
 app.use('/api/carts', cartsRoute);
 app.use('/', viewsRoute);
+
 
 const httpServer = app.listen(port, () => {
   console.log(`Server arriba http://localhost:${port}`);

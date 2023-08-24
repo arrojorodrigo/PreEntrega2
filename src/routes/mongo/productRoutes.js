@@ -1,11 +1,14 @@
 import { Router } from "express";
-import { MongoDBProducts } from "../../daos/mongo/MongoDBProducts.js";
+import { MongoDBProducts } from "../../dao/mongo/MongoDBProducts.js";
 import { validateNumber } from "../../utils/helpers.js";
 import {
   validateRequest,
   validateNumberParams,
   validateCodeNotRepeated,
 } from "../../middleware/validators.js";
+
+
+
 import multer from "multer";
 
 // Configuración de multer para gestionar la subida de imágenes.
