@@ -1,10 +1,7 @@
 import { Router } from "express";
 import { MongoDBProducts } from "../../dao/mongo/MongoDBProducts.js";
-import { validateNumber } from "../../utils/helpers.js";
 import {
   validateRequest,
-  validateNumberParams,
-  validateCodeNotRepeated,
 } from "../../middleware/validators.js";
 
 

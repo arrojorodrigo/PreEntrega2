@@ -1,12 +1,7 @@
-# PRE ENTREGA 2 CLASE 24.
+# PRE ENTREGA 2 - DESAFIO REESTRUCTURA DEL SERVIDOR.
 # Backend coderhouse
 
-!¡ Ecommerce 
-!¡ Modelo User
-!¡ Passport
-!¡ Sistema de login
-!¡ Session o Jwt
-
+!¡ Controllers
 
 -Run server
 >npm install
