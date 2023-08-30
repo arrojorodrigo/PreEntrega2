@@ -1,5 +1,4 @@
 
-
 const createCart = async (req, res) => {
     try {
       const cartCreated = await cartsDAO.create();
@@ -177,4 +176,4 @@ const deleteIdCart = async (req, res) => {
     }
   }
 
-module.exports = { createCart,getCart,getProduct,getIdCart,putProduct,putIdProduct,deleteCart,deleteIdCart}
+export { createCart,getCart,getProduct,getIdCart,putProduct,putIdProduct,deleteCart,deleteIdCart}
